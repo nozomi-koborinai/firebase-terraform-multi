@@ -1,0 +1,33 @@
+name: Terraform Apply
+on:
+  push:
+    tags:
+      - "*"
+jobs:
+  terraform-apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      _PROJECT_ID: ${{ secrets.PROJECT_ID }}
+      _PROJECT_NAME: ${{ secrets.PROJECT_NAME }}
+      _BILLING_ACCOUNT: ${{ secrets.BILLING_ACCOUNT }}
+      _ANDROID_PACKAGE_NAME: ${{ secrets.ANDROID_PACKAGE_NAME }}
+      _IOS_BUNDLE_ID: ${{ secrets.IOS_BUNDLE_ID }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Check Terraform Format
+        run: terraform fmt -check -diff
+
+      - name: Initialize Terraform
+        run: terraform init
+
+      - name: Run Terraform Plan
+        run: terraform plan -lock-timeout=120s -var=project_id=${_PROJECT_ID} -var=project_name=${_PROJECT_NAME} -var=billing_account=${_BILLING_ACCOUNT} -var=android_package_name=${_ANDROID_PACKAGE_NAME} -var=ios_bundle_id=${_IOS_BUNDLE_ID}
+
+      - name: Run Terraform Apply
+        run: terraform apply -auto-approve -lock-timeout=120s -var=project_id=${_PROJECT_ID} -var=project_name=${_PROJECT_NAME} -var=billing_account=${_BILLING_ACCOUNT} -var=android_package_name=${_ANDROID_PACKAGE_NAME} -var=ios_bundle_id=${_IOS_BUNDLE_ID}
