@@ -9,17 +9,17 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
       - name: Check Terraform Format
-        uses: hashicorp/terraform-github-actions@v1
-        with:
-          command: fmt
-          args: "-check -diff"
+        run: terraform fmt -check -diff
+
       - name: Initialize Terraform
-        uses: hashicorp/terraform-github-actions@v1
-        with:
-          command: init
+        run: terraform init
+
       - name: Run Terraform Plan
-        uses: hashicorp/terraform-github-actions@v1
-        with:
-          command: plan
-          args: "-lock-timeout=120s -var=project_id=${_PROJECT_ID} -var=project_name=${_PROJECT_NAME} -var=billing_account=${_BILLING_ACCOUNT} -var=android_package_name=${_ANDROID_PACKAGE_NAME} -var=ios_bundle_id=${_IOS_BUNDLE_ID}"
+        run: terraform plan -lock-timeout=120s -var=project_id=${_PROJECT_ID} -var=project_name=${_PROJECT_NAME} -var=billing_account=${_BILLING_ACCOUNT} -var=android_package_name=${_ANDROID_PACKAGE_NAME} -var=ios_bundle_id=${_IOS_BUNDLE_ID}
