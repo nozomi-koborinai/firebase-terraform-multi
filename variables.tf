@@ -22,8 +22,3 @@ variable "ios_bundle_id" {
   description = "バンドルID（iOS）"
   type        = string
 }
-
-variable "env" {
-  description = "環境名"
-  type        = string
-}
