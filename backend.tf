@@ -1,5 +1,5 @@
-# terraform {
-#   backend "gcs" {
-#     bucket = "firebase-terraform-multi-backend"
-#   }
-# }
+terraform {
+  backend "gcs" {
+    bucket = "firebase-terraform-multi-backend"
+  }
+}
