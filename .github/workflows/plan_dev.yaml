@@ -25,9 +25,6 @@ jobs:
           workload_identity_provider: 'projects/${_PROJECT_NUMBER_DEV}/locations/global/workloadIdentityPools/${_POOL_ID_DEV}/providers/github-actions-provider'
           service_account: '${_SERVICE_ACCOUNT_DEV}'
 
-      # プライベートな GCS バケットを読み取ってみる
-      - run: gcloud storage ls gs://oidc-test-bucket-example
-
       - name: Checkout code
         uses: actions/checkout@v2
 
