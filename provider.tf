@@ -8,13 +8,11 @@ terraform {
 }
 
 provider "google-beta" {
-  credentials           = file("$PWD/service-account-key.json")
   user_project_override = true
   billing_project       = var.project_id
 }
 
 provider "google-beta" {
-  credentials           = file("$PWD/service-account-key.json")
   alias                 = "no_user_project_override"
   user_project_override = false
 }
