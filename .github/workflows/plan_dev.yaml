@@ -22,10 +22,10 @@ jobs:
       IOS_BUNDLE_ID: ${{ secrets.IOS_BUNDLE_ID_DEV }}
       BUCKET_NAME: ${{ secrets.BUCKET_NAME_DEV }}
     steps:
-      - uses: google-github-actions/auth@v0
-        with:
-          workload_identity_provider: 'projects/${{ env.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ env.POOL_ID }}/providers/github-actions-provider'
-          service_account: ${{ env.SERVICE_ACCOUNT }}
+      - name: Setup Google Cloud Authentication
+        run: |
+          echo '${{ secrets.GOOGLE_CLOUD_SA_KEY_DEV }}' > service-account-key.json
+          echo 'GOOGLE_APPLICATION_CREDENTIALS=$PWD/service-account-key.json' >> $GITHUB_ENV
 
       - name: Checkout code
         uses: actions/checkout@v2
