@@ -35,9 +35,7 @@ jobs:
         run: terraform fmt -check -diff
 
       - name: Initialize Terraform
-        run: |
-          export GOOGLE_APPLICATION_CREDENTIALS=$PWD/service-account-key.json
-          terraform init -backend-config='bucket=${{ env.BUCKET_NAME }}'
+        run: terraform init -backend-config='bucket=${{ env.BUCKET_NAME }}'
 
       - name: Run Terraform Plan
         run: terraform plan -lock-timeout=120s -var=project_id=${{ env.PROJECT_ID }} -var=project_name=${{ env.PROJECT_NAME }} -var=billing_account=${{ env.BILLING_ACCOUNT }} -var=android_package_name=${{ env.ANDROID_PACKAGE_NAME }} -var=ios_bundle_id=${{ env.IOS_BUNDLE_ID }}
