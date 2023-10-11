@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
+      contents: write
     timeout-minutes: 60
     env:
       PROJECT_ID: ${{ secrets.PROJECT_ID_DEV }}
