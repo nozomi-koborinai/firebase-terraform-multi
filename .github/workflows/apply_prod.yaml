@@ -8,12 +8,21 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      _PROJECT_ID: ${{ secrets.PROJECT_ID_PROD }}
-      _PROJECT_NAME: ${{ secrets.PROJECT_NAME_PROD }}
-      _BILLING_ACCOUNT: ${{ secrets.BILLING_ACCOUNT_PROD }}
-      _ANDROID_PACKAGE_NAME: ${{ secrets.ANDROID_PACKAGE_NAME_PROD }}
-      _IOS_BUNDLE_ID: ${{ secrets.IOS_BUNDLE_ID_PROD }}
+      PROJECT_ID: ${{ secrets.PROJECT_ID_PROD }}
+      PROJECT_NAME: ${{ secrets.PROJECT_NAME_PROD }}
+      PROJECT_NUMBER: ${{ secrets.PROJECT_NUMBER_PROD }}
+      BILLING_ACCOUNT: ${{ secrets.BILLING_ACCOUNT_PROD }}
+      POOL_ID: ${{ secrets.POOL_ID_PROD }}
+      SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT_PROD }}
+      ANDROID_PACKAGE_NAME: ${{ secrets.ANDROID_PACKAGE_NAME_PROD }}
+      IOS_BUNDLE_ID: ${{ secrets.IOS_BUNDLE_ID_PROD }}
+      ENVIRONMENT: prod
     steps:
+      - uses: google-github-actions/auth@v0
+        with:
+          workload_identity_provider: 'projects/${{ env.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ env.POOL_ID }}/providers/github-actions-provider'
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -27,7 +36,7 @@ jobs:
         run: terraform init
 
       - name: Run Terraform Plan
-        run: terraform plan -lock-timeout=120s -var=project_id=${_PROJECT_ID} -var=project_name=${_PROJECT_NAME} -var=billing_account=${_BILLING_ACCOUNT} -var=android_package_name=${_ANDROID_PACKAGE_NAME} -var=ios_bundle_id=${_IOS_BUNDLE_ID}
+        run: terraform plan -lock-timeout=120s -var=project_id=${{ env.PROJECT_ID }} -var=project_name=${{ env.PROJECT_NAME }} -var=billing_account=${{ env.BILLING_ACCOUNT }} -var=android_package_name=${{ env.ANDROID_PACKAGE_NAME }} -var=ios_bundle_id=${{ env.IOS_BUNDLE_ID }} -var=env=${{ env.ENVIRONMENT }}
 
       - name: Run Terraform Apply
-        run: terraform apply -auto-approve -lock-timeout=120s -var=project_id=${_PROJECT_ID} -var=project_name=${_PROJECT_NAME} -var=billing_account=${_BILLING_ACCOUNT} -var=android_package_name=${_ANDROID_PACKAGE_NAME} -var=ios_bundle_id=${_IOS_BUNDLE_ID}
+        run: terraform apply -auto-approve -lock-timeout=120s -var=project_id=${{ env.PROJECT_ID }} -var=project_name=${{ env.PROJECT_NAME }} -var=billing_account=${{ env.BILLING_ACCOUNT }} -var=android_package_name=${{ env.ANDROID_PACKAGE_NAME }} -var=ios_bundle_id=${{ env.IOS_BUNDLE_ID }} -var=env=${{ env.ENVIRONMENT }}
