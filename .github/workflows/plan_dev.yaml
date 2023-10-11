@@ -7,6 +7,9 @@ on:
 jobs:
   terraform-plan:
     runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     timeout-minutes: 60
     env:
       PROJECT_ID: ${{ secrets.PROJECT_ID_DEV }}
@@ -18,13 +21,12 @@ jobs:
       ANDROID_PACKAGE_NAME: ${{ secrets.ANDROID_PACKAGE_NAME_DEV }}
       IOS_BUNDLE_ID: ${{ secrets.IOS_BUNDLE_ID_DEV }}
       BUCKET_NAME: ${{ secrets.BUCKET_NAME_DEV }}
-      GOOGLE_CLOUD_SA_KEY_DEV: ${{ secrets.GOOGLE_CLOUD_SA_KEY_DEV }}
     steps:
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@master
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v1'
         with:
-          service_account_key: ${{ env.GOOGLE_CLOUD_SA_KEY_DEV }}
-          export_default_credentials: true
+          workload_identity_provider: 'projects/237560958645/locations/global/workloadIdentityPools/github-actions/providers/use from GitHub Actions provider'
+          service_account: 'github-actions@firebase-terraform-multi-dev.iam.gserviceaccount.com'
 
       - name: Checkout code
         uses: actions/checkout@v2
