@@ -7,9 +7,6 @@ on:
 jobs:
   terraform-plan:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write
-      contents: write
     timeout-minutes: 60
     env:
       PROJECT_ID: ${{ secrets.PROJECT_ID_DEV }}
@@ -24,7 +21,7 @@ jobs:
     steps:
       - name: Setup Google Cloud Authentication
         run: |
-          echo ${{ secrets.GOOGLE_CLOUD_SA_KEY_DEV }} > service-account-key.json
+          echo '${{ secrets.GOOGLE_CLOUD_SA_KEY_DEV }}' > service-account-key.json
           echo 'GOOGLE_APPLICATION_CREDENTIALS=$PWD/service-account-key.json' >> $GITHUB_ENV
 
       - name: Checkout code
