@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/service-account-key.json
       PROJECT_ID: ${{ secrets.PROJECT_ID_DEV }}
       PROJECT_NAME: ${{ secrets.PROJECT_NAME_DEV }}
       PROJECT_NUMBER: ${{ secrets.PROJECT_NUMBER_DEV }}
@@ -19,11 +18,11 @@ jobs:
       ANDROID_PACKAGE_NAME: ${{ secrets.ANDROID_PACKAGE_NAME_DEV }}
       IOS_BUNDLE_ID: ${{ secrets.IOS_BUNDLE_ID_DEV }}
       BUCKET_NAME: ${{ secrets.BUCKET_NAME_DEV }}
-      GOOGLE_CLOUD_SA_KEY: ${{ secrets.GOOGLE_CLOUD_SA_KEY_DEV }}
+      GCP_SA_KEY: ${{ secrets.GOOGLE_CLOUD_SA_KEY_DEV }}
     steps:
       - name: Setup Google Cloud Authentication
         run: |
-          echo '${{ env.GOOGLE_CLOUD_SA_KEY }}' > service-account-key.json
+          echo '${{ secrets.GCP_SA_KEY }}' > service-account-key.json
           echo 'GOOGLE_APPLICATION_CREDENTIALS=$PWD/service-account-key.json' >> $GITHUB_ENV
 
       - name: Checkout code
@@ -34,14 +33,6 @@ jobs:
 
       - name: Check Terraform Format
         run: terraform fmt -check -diff
-
-      - name: Check file permissions
-        run: ls -l "${{ env.GOOGLE_APPLICATION_CREDENTIALS }}"
-
-
-
-      - name: Print GOOGLE_APPLICATION_CREDENTIALS
-        run: echo $GOOGLE_APPLICATION_CREDENTIALS
 
       - name: Initialize Terraform
         run: terraform init -backend-config='bucket=${{ env.BUCKET_NAME }}'
