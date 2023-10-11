@@ -20,9 +20,9 @@ jobs:
       BUCKET_NAME: ${{ secrets.BUCKET_NAME_DEV }}
       GOOGLE_CLOUD_SA_KEY: ${{ secrets.GOOGLE_CLOUD_SA_KEY_DEV }}
     steps:
-      - name: Debug output (REMOVE AFTER DEBUGGING)
-        run: echo "${{ env.GOOGLE_CLOUD_SA_KEY }}"
-        
+      - name: List files
+        run: ls -al
+
       - name: Setup Google Cloud Authentication
         run: |
           echo '${{ env.GOOGLE_CLOUD_SA_KEY }}' > service-account-key.json
