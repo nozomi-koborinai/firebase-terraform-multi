@@ -2,4 +2,7 @@
 locals {
   # リージョンコード：東京
   region = "asia-northeast1"
+
+  # アプリ名
+  app_name = "Sample App"
 }
