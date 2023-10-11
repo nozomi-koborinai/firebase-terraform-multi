@@ -8,6 +8,7 @@ terraform {
 }
 
 provider "google-beta" {
+  credentials = file("${path.module}/service-account-key.json")
   user_project_override = true
   billing_project       = var.project_id
 }
