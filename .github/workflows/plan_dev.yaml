@@ -18,10 +18,14 @@ jobs:
       ANDROID_PACKAGE_NAME: ${{ secrets.ANDROID_PACKAGE_NAME_DEV }}
       IOS_BUNDLE_ID: ${{ secrets.IOS_BUNDLE_ID_DEV }}
       BUCKET_NAME: ${{ secrets.BUCKET_NAME_DEV }}
+      GOOGLE_CLOUD_SA_KEY: ${{ secrets.GOOGLE_CLOUD_SA_KEY_DEV }}
     steps:
+      - name: Debug output (REMOVE AFTER DEBUGGING)
+        run: echo "${{ env.GOOGLE_CLOUD_SA_KEY }}"
+        
       - name: Setup Google Cloud Authentication
         run: |
-          echo '${{ secrets.GOOGLE_CLOUD_SA_KEY_DEV }}' > service-account-key.json
+          echo '${{ env.GOOGLE_CLOUD_SA_KEY }}' > service-account-key.json
           echo 'GOOGLE_APPLICATION_CREDENTIALS=$PWD/service-account-key.json' >> $GITHUB_ENV
 
       - name: Checkout code
