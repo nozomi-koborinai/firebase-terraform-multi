@@ -7,14 +7,27 @@ on:
 jobs:
   terraform-plan:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     timeout-minutes: 60
     env:
       _PROJECT_ID: ${{ secrets.PROJECT_ID_DEV }}
       _PROJECT_NAME: ${{ secrets.PROJECT_NAME_DEV }}
+      _PROJECT_NUMBER_DEV: ${{ secrets.PROJECT_NUMBER_DEV }}
       _BILLING_ACCOUNT: ${{ secrets.BILLING_ACCOUNT_DEV }}
+      _POOL_ID_DEV: ${{ secrets.POOL_ID_DEV }}
+      _SERVICE_ACCOUNT_DEV: ${{ secrets.SERVICE_ACCOUNT_DEV }}
       _ANDROID_PACKAGE_NAME: ${{ secrets.ANDROID_PACKAGE_NAME_DEV }}
       _IOS_BUNDLE_ID: ${{ secrets.IOS_BUNDLE_ID_DEV }}
     steps:
+      - uses: google-github-actions/auth@v0
+        with:
+          workload_identity_provider: 'projects/${_PROJECT_NUMBER_DEV}/locations/global/workloadIdentityPools/${_POOL_ID_DEV}/providers/github-actions-provider'
+          service_account: '${_SERVICE_ACCOUNT_DEV}'
+
+      # プライベートな GCS バケットを読み取ってみる
+      - run: gcloud storage ls gs://oidc-test-bucket-example
+
       - name: Checkout code
         uses: actions/checkout@v2
 
