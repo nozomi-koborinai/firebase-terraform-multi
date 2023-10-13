@@ -28,6 +28,11 @@ jobs:
           workload_identity_provider: 'projects/${{ env.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ env.POOL_ID }}/providers/github-actions-provider'
           service_account: ${{ env.SERVICE_ACCOUNT }}
           create_credentials_file: true
+          export_environment_variables: true
+
+      - name: Terraform init
+        run: |
+          terraform init -input=false
 
       - uses: google-github-actions/setup-gcloud@v1
         with:
