@@ -35,7 +35,7 @@ jobs:
 
       - name: Terraform init
         run: |
-          terraform init -input=false
+          terraform init -input=false -backend-config="bucket=${{ env.BUCKET_NAME }}"
 
       # - uses: google-github-actions/setup-gcloud@v1
       #   with:
