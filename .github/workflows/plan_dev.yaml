@@ -26,7 +26,7 @@ jobs:
         uses: 'google-github-actions/auth@v1'
         with:
           workload_identity_provider: 'projects/${{ env.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ env.POOL_ID }}/providers/github-actions-provider'
-          service_account: '${{ env.SERVICE_ACCOUNT }}}'
+          service_account: ${{ env.SERVICE_ACCOUNT }}
 
       - name: Checkout code
         uses: actions/checkout@v2
