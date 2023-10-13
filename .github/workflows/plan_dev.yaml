@@ -33,6 +33,9 @@ jobs:
         with:
           version: '>= 445.0.0'
 
+      - name: Print GOOGLE_APPLICATION_CREDENTIALS value
+        run: echo $GOOGLE_APPLICATION_CREDENTIALS
+
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -41,9 +44,6 @@ jobs:
 
       - name: Check Terraform Format
         run: terraform fmt -check -diff
-
-      - name: 'Upload test file'
-        run: 'echo "test" > test.txt && gsutil cp test.txt gs://${{ env.BUCKET_NAME }}'
 
       - name: Initialize Terraform
         run: terraform init -backend-config='bucket=${{ env.BUCKET_NAME }}'
