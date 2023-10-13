@@ -40,11 +40,11 @@ jobs:
       - name: Check Terraform Format
         run: terraform fmt -check -diff -recursive
 
-      - name: Terraform init
-        run: terraform init -input=false -backend-config="bucket=${{ env.BUCKET_NAME }}"
-
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Terraform init
+        run: terraform init -input=false -backend-config="bucket=${{ env.BUCKET_NAME }}"
 
       - name: Run Terraform Plan
         run: terraform plan -lock-timeout=120s -var=project_id=${{ env.PROJECT_ID }} -var=project_name=${{ env.PROJECT_NAME }} -var=billing_account=${{ env.BILLING_ACCOUNT }} -var=android_package_name=${{ env.ANDROID_PACKAGE_NAME }} -var=ios_bundle_id=${{ env.IOS_BUNDLE_ID }}
