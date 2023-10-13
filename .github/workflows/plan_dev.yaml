@@ -33,8 +33,8 @@ jobs:
         with:
           version: '>= 445.0.0'
 
-      - name: Print GOOGLE_APPLICATION_CREDENTIALS value
-        run: echo $GOOGLE_APPLICATION_CREDENTIALS
+      - name: Check if the credentials file exists
+        run: ls -l $GOOGLE_APPLICATION_CREDENTIALS
 
       - name: Checkout code
         uses: actions/checkout@v2
