@@ -22,6 +22,9 @@ jobs:
       IOS_BUNDLE_ID: ${{ secrets.IOS_BUNDLE_ID_DEV }}
       BUCKET_NAME: ${{ secrets.BUCKET_NAME_DEV }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v1'
         with:
@@ -39,9 +42,6 @@ jobs:
 
       - name: Check Terraform Format
         run: terraform fmt -check -diff -recursive
-
-      - name: Checkout code
-        uses: actions/checkout@v2
 
       - name: Terraform init
         run: terraform init -input=false -backend-config="bucket=${{ env.BUCKET_NAME }}"
