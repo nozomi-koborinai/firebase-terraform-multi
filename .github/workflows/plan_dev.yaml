@@ -22,11 +22,6 @@ jobs:
       IOS_BUNDLE_ID: ${{ secrets.IOS_BUNDLE_ID_DEV }}
       BUCKET_NAME: ${{ secrets.BUCKET_NAME_DEV }}
     steps:
-
-
-      - name: Check Terraform Format
-        run: terraform fmt -check -diff
-
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v1'
         with:
@@ -41,6 +36,9 @@ jobs:
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
+
+      - name: Check Terraform Format
+        run: terraform fmt -check -diff -recursive
 
       - name: Terraform init
         run: terraform init -input=false -backend-config="bucket=${{ env.BUCKET_NAME }}"
