@@ -29,25 +29,20 @@ jobs:
           service_account: ${{ env.SERVICE_ACCOUNT }}
           create_credentials_file: true
 
-      - name: Print GOOGLE_APPLICATION_CREDENTIALS
-        run: echo $GOOGLE_APPLICATION_CREDENTIALS
-
-      - name: Check if credentials file exists
-        run: ls -l $GOOGLE_APPLICATION_CREDENTIALS
-
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
 
-      - name: Initialize Terraform
-        run: |
-          export GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
-          terraform init -backend-config='bucket=${{ env.BUCKET_NAME }}'
-
       - name: Check Terraform Format
         run: terraform fmt -check -diff
+
+      - name: Print current working directory
+        run: pwd
+
+      - name: Change to directory containing the credentials
+        run: cd ${{ github.workspace }}
 
       - name: Initialize Terraform
         run: terraform init -backend-config='bucket=${{ env.BUCKET_NAME }}'
