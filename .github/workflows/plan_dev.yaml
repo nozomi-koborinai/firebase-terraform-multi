@@ -30,19 +30,6 @@ jobs:
           create_credentials_file: true
           export_environment_variables: true
 
-      - uses: google-github-actions/setup-gcloud@v1
-        with:
-          version: '>= 445.0.0'
-
-      - name: Check if the credentials file exists
-        run: ls -l $GOOGLE_APPLICATION_CREDENTIALS
-
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      # - name: Setup Terraform
-      #   uses: hashicorp/setup-terraform@v1
-
       - name: Check Terraform Format
         run: terraform fmt -check -diff
 
@@ -50,8 +37,18 @@ jobs:
         run: |
           terraform init -input=false
 
+      # - uses: google-github-actions/setup-gcloud@v1
+      #   with:
+      #     version: '>= 445.0.0'
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # - name: Setup Terraform
+      #   uses: hashicorp/setup-terraform@v1
+
       # - name: Initialize Terraform
       #   run: terraform init -backend-config='bucket=${{ env.BUCKET_NAME }}'
 
-      - name: Run Terraform Plan
-        run: terraform plan -lock-timeout=120s -var=project_id=${{ env.PROJECT_ID }} -var=project_name=${{ env.PROJECT_NAME }} -var=billing_account=${{ env.BILLING_ACCOUNT }} -var=android_package_name=${{ env.ANDROID_PACKAGE_NAME }} -var=ios_bundle_id=${{ env.IOS_BUNDLE_ID }}
+      # - name: Run Terraform Plan
+      #   run: terraform plan -lock-timeout=120s -var=project_id=${{ env.PROJECT_ID }} -var=project_name=${{ env.PROJECT_NAME }} -var=billing_account=${{ env.BILLING_ACCOUNT }} -var=android_package_name=${{ env.ANDROID_PACKAGE_NAME }} -var=ios_bundle_id=${{ env.IOS_BUNDLE_ID }}
