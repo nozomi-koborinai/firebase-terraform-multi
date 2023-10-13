@@ -30,16 +30,16 @@ jobs:
           create_credentials_file: true
           export_environment_variables: true
 
+      - uses: google-github-actions/setup-gcloud@v1
+        with:
+          version: '>= 445.0.0'
+
       - name: Check Terraform Format
         run: terraform fmt -check -diff
 
       - name: Terraform init
         run: |
           terraform init -input=false -backend-config="bucket=${{ env.BUCKET_NAME }}"
-
-      # - uses: google-github-actions/setup-gcloud@v1
-      #   with:
-      #     version: '>= 445.0.0'
 
       - name: Checkout code
         uses: actions/checkout@v2
