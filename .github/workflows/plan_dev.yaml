@@ -43,7 +43,7 @@ jobs:
       - name: Check Terraform Format
         run: terraform fmt -check -diff -recursive
 
-      - name: Terraform init
+      - name: Initialize Terraform
         run: terraform init -input=false -backend-config="bucket=${{ env.BUCKET_NAME }}"
 
       - name: Run Terraform Plan
