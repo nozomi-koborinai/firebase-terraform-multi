@@ -7,8 +7,8 @@ jobs:
   terraform-apply:
     runs-on: ubuntu-latest
     permissions:
-      id-token: 'write'
-      contents: 'read'
+      id-token: write
+      contents: read
     timeout-minutes: 60
     env:
       PROJECT_ID: ${{ secrets.PROJECT_ID_DEV }}
@@ -23,7 +23,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
       - name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v1'
         with:
@@ -31,22 +30,17 @@ jobs:
           service_account: ${{ env.SERVICE_ACCOUNT }}
           create_credentials_file: true
           export_environment_variables: true
-
-      - uses: google-github-actions/setup-gcloud@v1
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
         with:
           version: '>= 445.0.0'
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
-
       - name: Check Terraform Format
         run: terraform fmt -check -diff -recursive
-
       - name: Initialize Terraform
         run: terraform init -input=false -backend-config="bucket=${{ env.BUCKET_NAME }}"
-
       - name: Run Terraform Plan
         run: terraform plan -lock-timeout=120s -var=project_id=${{ env.PROJECT_ID }} -var=project_name=${{ env.PROJECT_NAME }} -var=billing_account=${{ env.BILLING_ACCOUNT }} -var=android_package_name=${{ env.ANDROID_PACKAGE_NAME }} -var=ios_bundle_id=${{ env.IOS_BUNDLE_ID }}
-
       - name: Run Terraform Apply
         run: terraform apply -auto-approve -lock-timeout=120s -var=project_id=${{ env.PROJECT_ID }} -var=project_name=${{ env.PROJECT_NAME }} -var=billing_account=${{ env.BILLING_ACCOUNT }} -var=android_package_name=${{ env.ANDROID_PACKAGE_NAME }} -var=ios_bundle_id=${{ env.IOS_BUNDLE_ID }}
